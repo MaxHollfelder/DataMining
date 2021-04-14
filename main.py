@@ -1,4 +1,4 @@
 import numpy as np
-import pands as pd
+import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
