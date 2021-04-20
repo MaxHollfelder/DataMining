@@ -8,6 +8,7 @@ from sklearn import metrics
 from sklearn.metrics import confusion_matrix 
 from sklearn.metrics import multilabel_confusion_matrix
 from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
 
 # 
 # This initial part is loading up the data set and then mergeing them into one dataset. 
@@ -22,21 +23,32 @@ data7 = pd.read_csv('data/2006-07_Regular_box_scores.csv', sep=",")
 data8 = pd.read_csv('data/2007-08_Regular_box_scores.csv', sep=",")
 data9 = pd.read_csv('data/2008-09_Regular_box_scores.csv', sep=",")
 data10 = pd.read_csv('data/2009-10_Regular_box_scores.csv', sep=",")
-merged = pd.concat([data1, data2, data3, data4, data5, data6, data7, data8, data9, data10], ignore_index=True)
-print(merged.tail(10))
+final_dataset = pd.concat([data1, data2, data3, data4, data5, data6, data7, data8, data9, data10], ignore_index=True)
+# print(final_dataset.tail(10))
 #
 # what below is doing it dropping the columns that I do not think that we are going to need 
-merged = merged.drop(columns=['TEAM', 'MATCH UP', 'GAME DATE', 'MIN'])
+final_dataset = final_dataset.drop(columns=['TEAM', 'MATCH UP', 'GAME DATE', 'MIN'])
 
-y = merged[['W/L']]
+# user input 
+num_Input = int(input("How many categories : "))
+cat = []
+for i in range(num_Input):
+    userInput = input("Category: ")
+    cat.append(userInput)
+
+input_dataset = final_dataset[cat]
+print(input_dataset)
+
+
+y = final_dataset[['W/L']]
 # PTS = POINTS, FGM = FIELD GOALS MADE, FG% = FIELD GOAL PERCENTAGE, 3PM = THREE POINTS MADE, 3PA = THREE POINTS ATTEMPTED
 # FTM = FREE THROWS MADE, FT% = FREE THROW PRECENTATGE, OREB = OFENSIVE REBOUNDS, DREB = DEFENSIVE REBOUNDS, AST = ASSISTS, 
 # STL = STEALS, BLK = BLOCKS, TOV = TURNOVERS, PF = PERSONAL FOULS, =/- CALCULATED TEAM RATING (BASED OFF OF THAT GAME)
-x = merged[['PTS', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FT%', 'OREB', 'DREB', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'PF', '+/-']]
+x = final_dataset[['PTS', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FT%', 'OREB', 'DREB', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'PF', '+/-']]
 # 
 # This is splitting the merged datasets into tesing and training data sets. for this we are doing 
 # and 80 - 20 split. 80% of that data in training and 20% in testing. 
-x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=.02)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=.20)
 # print(x_train.head(10))
 # print(y_train.head(10))
 # 
@@ -44,9 +56,12 @@ x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=.02)
 gnb = GaussianNB()
 gnb.fit(x_train, y_train)
 y_prediction = gnb.predict(x_test)
-#print(y_prediction)
-#print(len(y_prediction))
-#print(len(y_test))
+y_prediction = np.ravel(y_prediction)
+y_test = np.ravel(y_test)
+print(y_prediction)
+print(y_test)
+# print(len(y_prediction))
+# print(len(y_test))
 
 #
 #This is printing the accuracy of the naive bayes predictions. 
@@ -57,6 +72,7 @@ print("Accuracy of regular season predictions using naive bayes: ", metrics.accu
 CMMultilabel = multilabel_confusion_matrix(y_test, y_prediction)
 print(CMMultilabel)
 CM = confusion_matrix(y_test, y_prediction)
+print("Confusion Matrix Below")
 print(CM)
 TP = CM[0,0]
 FN = CM[0,1]
@@ -68,11 +84,19 @@ print("False Positives: ", FP)
 print("True Negatives: ", TN)
 
 #
-# This is 
-precisionScore = precision_score(y_test, y_prediction, average='macro')
-print(precisionScore)
+# Here percision score of the test and actually predicted. 
+precisionScore = precision_score(y_test, y_prediction, average='micro')
+print("Precision Score: ", precisionScore)
+
+#
+# Here we are finding the recall 
+recallScore = recall_score(y_test, y_prediction, average='micro') 
+print("Recall Score: ", recallScore)
+
+
 # Thinking we may want to do something like maybe using a season as a training data and playoffs as a test and see how it works 
-
-
 # Best teams head to head not sure really how to do this. 
-# thinking for this we train the data on what we have. so all of the seasons, when we make the test
+# thinking for this we train the data on what we have. so all of the seasons, when we make the test 
+
+
+## if shoot above a certain percentage are you more likely to win. 
