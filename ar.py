@@ -40,23 +40,122 @@ x = final_dataset[['PTS', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FT%'
 #Here we are finding the means or all the columns
 MEAN = final_dataset.mean()
 PTS_MEAN = MEAN['PTS']
+FGM_MEAN = MEAN['FGM']
 FGM_MEAN = final_dataset['FGM'].mean()
 print(PTS_MEAN)
 
 ar = x 
-#create a dataset with 1 for above mean and 0 for below mean. 
-for column in ar[['PTS']]:
-    columnSeriesObj = ar['PTS']
-    print(columnSeriesObj.values)
-    col_size = len(columnSeriesObj)
-    print(col_size) 
-    for iteration in range(col_size):
-        if columnSeriesObj[iteration] > MEAN['PTS']:
-            columnSeriesObj[iteration] = 1
-        else:
-            columnSeriesObj[iteration] = 0
-    ar['PTS'] = columnSeriesObj
+greater = 0 
+less = 0
+for i in ar.index:
+    if ar.at[i, 'PTS'] > MEAN['PTS']:
+        greater += 1
+        ar.at[i, 'PTS'] = 1
+    else:
+        less += 1
+        ar.at[i, 'PTS'] = 0
+        
+    if ar.at[i,'FGM'] > MEAN['FGM']:
+        ar.at[i, 'FGM'] = 1
+    else:
+        ar.at[i, 'FGM'] = 0
+        
+    if ar.at[i,'FGA'] > MEAN['FGA']:
+        ar.at[i, 'FGA'] = 1
+    else:
+        ar.at[i, 'FGA'] = 0
+            
+    if ar.at[i,'FG%'] > MEAN['FG%']:
+        ar.at[i, 'FG%'] = 1
+    else:
+        ar.at[i, 'FG%'] = 0
+                
+    if ar.at[i,'3PM'] > MEAN['3PM']:
+        ar.at[i, '3PM'] = 1
+    else:
+        ar.at[i, '3PM'] = 0
+                    
+    if ar.at[i,'3PA'] > MEAN['3PA']:
+        ar.at[i, '3PA'] = 1
+    else:
+        ar.at[i, '3PA'] = 0
+                
+    if ar.at[i,'3P%'] > MEAN['3P%']:
+        ar.at[i, '3P%'] = 1
+    else:
+        ar.at[i, '3P%'] = 0
+            
+    if ar.at[i,'FTM'] > MEAN['FTM']:
+        ar.at[i, 'FTM'] = 1
+    else:
+        ar.at[i, 'FTM'] = 0
+                    
+    if ar.at[i,'FT%'] > MEAN['FT%']:
+        ar.at[i, 'FT%'] = 1
+    else:
+        ar.at[i, 'FT%'] = 0
+                            
+    if ar.at[i,'OREB'] > MEAN['OREB']:
+        ar.at[i, 'OREB'] = 1
+    else:
+        ar.at[i, 'OREB'] = 0
+                                    
+    if ar.at[i,'DREB'] > MEAN['DREB']:
+        ar.at[i, 'DREB'] = 1
+    else:
+        ar.at[i, 'DREB'] = 0
+                                            
+    if ar.at[i,'REB'] > MEAN['REB']:
+        ar.at[i, 'REB'] = 1
+    else:
+        ar.at[i, 'REB'] = 0
+                                                    
+    if ar.at[i,'AST'] > MEAN['AST']:
+        ar.at[i, 'AST'] = 1
+    else:
+        ar.at[i, 'AST'] = 0
+        
+    if ar.at[i,'STL'] > MEAN['STL']:
+        ar.at[i, 'STL'] = 1
+    else:
+        ar.at[i, 'STL'] = 0
+               
+    if ar.at[i,'BLK'] > MEAN['BLK']:
+        ar.at[i, 'BLK'] = 1
+    else:
+        ar.at[i, 'BLK'] = 0
+                       
+    if ar.at[i,'TOV'] > MEAN['TOV']:
+        ar.at[i, 'TOV'] = 1
+    else:
+        ar.at[i, 'TOV'] = 0
+                           
+    if ar.at[i,'PF'] > MEAN['PF']:
+        ar.at[i, 'PF'] = 1
+    else:
+        ar.at[i, 'PF'] = 0
+                           
+    if ar.at[i,'+/-'] > MEAN['+/-']:
+        ar.at[i, '+/-'] = 1
+    else:
+        ar.at[i, '+/-'] = 0
+
+print(greater)
+print(less)
 print(ar)
+#create a dataset with 1 for above mean and 0 for below mean. 
+# for column in ar[['PTS']]:
+#     columnSeriesObj = ar['PTS']
+#     print(columnSeriesObj.values)
+#     col_size = len(columnSeriesObj)
+#     print(col_size) 
+#     for iteration in range(col_size):
+#         if columnSeriesObj[iteration] > MEAN['PTS']:
+#             columnSeriesObj[iteration] = 1
+#         else:
+#             columnSeriesObj[iteration] = 0
+#     ar['PTS'] = columnSeriesObj
+# print(ar)
 
 
 # for i in ar[['PTS', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FT%', 'OREB', 'DREB', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'PF', '+/-']]:
