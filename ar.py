@@ -30,29 +30,22 @@ final_dataset = pd.concat([data1, data2, data3, data4, data5, data6, data7, data
 # what below is doing it dropping the columns that I do not think that we are going to need 
 final_dataset = final_dataset.drop(columns=['TEAM', 'MATCH UP', 'GAME DATE', 'MIN'])
 
-y = final_dataset[['W/L']]
-
 # PTS = POINTS, FGM = FIELD GOALS MADE, FG% = FIELD GOAL PERCENTAGE, 3PM = THREE POINTS MADE, 3PA = THREE POINTS ATTEMPTED
 # FTM = FREE THROWS MADE, FT% = FREE THROW PRECENTATGE, OREB = OFENSIVE REBOUNDS, DREB = DEFENSIVE REBOUNDS, AST = ASSISTS, 
 # STL = STEALS, BLK = BLOCKS, TOV = TURNOVERS, PF = PERSONAL FOULS, =/- CALCULATED TEAM RATING (BASED OFF OF THAT GAME)
-x = final_dataset[['PTS', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FT%', 'OREB', 'DREB', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'PF', '+/-']]
-
+x = final_dataset[['W/L', 'PTS', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FT%', 'OREB', 'DREB', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'PF', '+/-']]
+wins = final_dataset['W/L'] == 'W'
+print(wins)
+only_wins = final_dataset[wins]
+print(only_wins)
 #Here we are finding the means or all the columns
 MEAN = final_dataset.mean()
-PTS_MEAN = MEAN['PTS']
-FGM_MEAN = MEAN['FGM']
-FGM_MEAN = final_dataset['FGM'].mean()
-print(PTS_MEAN)
+ar = only_wins.drop(columns= ['W/L'])
 
-ar = x 
-greater = 0 
-less = 0
 for i in ar.index:
     if ar.at[i, 'PTS'] > MEAN['PTS']:
-        greater += 1
         ar.at[i, 'PTS'] = 1
     else:
-        less += 1
         ar.at[i, 'PTS'] = 0
         
     if ar.at[i,'FGM'] > MEAN['FGM']:
@@ -89,6 +82,11 @@ for i in ar.index:
         ar.at[i, 'FTM'] = 1
     else:
         ar.at[i, 'FTM'] = 0
+
+    if ar.at[i,'FTA'] > MEAN['FTA']:
+        ar.at[i, 'FTA'] = 1
+    else:
+        ar.at[i, 'FTA'] = 0
                     
     if ar.at[i,'FT%'] > MEAN['FT%']:
         ar.at[i, 'FT%'] = 1
@@ -131,7 +129,7 @@ for i in ar.index:
         ar.at[i, 'TOV'] = 0
                            
     if ar.at[i,'PF'] > MEAN['PF']:
-        ar.at[i, 'PF'] = 1
+        ar.at[i, 'PF'] = 1 
     else:
         ar.at[i, 'PF'] = 0
                            
@@ -140,28 +138,7 @@ for i in ar.index:
     else:
         ar.at[i, '+/-'] = 0
 
-print(greater)
-print(less)
 print(ar)
-#create a dataset with 1 for above mean and 0 for below mean. 
-# for column in ar[['PTS']]:
-#     columnSeriesObj = ar['PTS']
-#     print(columnSeriesObj.values)
-#     col_size = len(columnSeriesObj)
-#     print(col_size) 
-#     for iteration in range(col_size):
-#         if columnSeriesObj[iteration] > MEAN['PTS']:
-#             columnSeriesObj[iteration] = 1
-#         else:
-#             columnSeriesObj[iteration] = 0
-#     ar['PTS'] = columnSeriesObj
-# print(ar)
 
-
-# for i in ar[['PTS', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FT%', 'OREB', 'DREB', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'PF', '+/-']]:
-#     if ar[i].values > MEAN[i].values:
-#         ar[i].values == 1
-#     else:
-#         ar[i].values == 0
-
-# print(ar)
+# Now from here we are actually going to have to do one of the association minging rule algorithms on 
+# this dataset. 
