@@ -10,7 +10,7 @@ from sklearn.metrics import multilabel_confusion_matrix
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 
-# 
+
 # This initial part is loading up the data set and then mergeing them into one dataset. 
 # we have to do this because we are using multiple years and each dataset is going to have to 
 data1 = pd.read_csv('data/2000-01_Regular_box_scores.csv', sep=",")
@@ -23,8 +23,17 @@ data7 = pd.read_csv('data/2006-07_Regular_box_scores.csv', sep=",")
 data8 = pd.read_csv('data/2007-08_Regular_box_scores.csv', sep=",")
 data9 = pd.read_csv('data/2008-09_Regular_box_scores.csv', sep=",")
 data10 = pd.read_csv('data/2009-10_Regular_box_scores.csv', sep=",")
-final_dataset = pd.concat([data1, data2, data3, data4, data5, data6, data7, data8, data9, data10], ignore_index=True)
-# print(final_dataset.tail(10))
+data11 = pd.read_csv('data/2010-11_Regular_box_scores.csv', sep=",")
+data12 = pd.read_csv('data/2011-12_Regular_box_scores.csv', sep=",")
+data13 = pd.read_csv('data/2013-14_Regular_box_scores.csv', sep=",")
+data14 = pd.read_csv('data/2014-15_Regular_box_scores.csv', sep=",")
+data15 = pd.read_csv('data/2015-16_Regular_box_scores.csv', sep=",")
+data16 = pd.read_csv('data/2016-17_Regular_box_scores.csv', sep=",")
+data17 = pd.read_csv('data/2017-18_Regular_box_scores.csv', sep=",")
+data18 = pd.read_csv('data/2018-19_Regular_box_scores.csv', sep=",")
+data19 = pd.read_csv('data/2019-20_Regular_box_scores.csv', sep=",")
+final_dataset = pd.concat([data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19], ignore_index=True)
+print(final_dataset.tail(10))
 #
 # what below is doing it dropping the columns that I do not think that we are going to need 
 final_dataset = final_dataset.drop(columns=['TEAM', 'MATCH UP', 'GAME DATE', 'MIN'])
@@ -84,58 +93,66 @@ recallScore = recall_score(y_test, y_prediction, average='micro')
 print("Recall Score: ", recallScore)
 
 ##
-#user input section. 
-num_Input = int(input("How many categories : "))
-cat = []
-for i in range(num_Input):
-    userInput = input("Category: ")
-    cat.append(userInput)
+#user input section.
 
-input_dataset = final_dataset[cat]
-print(input_dataset)
+def naive_bayes_UI():
+    num_Input = int(input("How many categories : "))
+    cat = []
+    for i in range(num_Input):
+        userInput = input("Category: ")
+        cat.append(userInput)
 
-x_input_train, x_input_test, y_input_train, y_input_test = train_test_split(input_dataset, y, test_size=.20)
- # Naive bayes on the data 
-gnb = GaussianNB()
-gnb.fit(x_input_train, y_input_train)
-y_input_prediction = gnb.predict(x_input_test)
-y_input_prediction = np.ravel(y_input_prediction)
-y_input_test = np.ravel(y_input_test)
-print(y_input_prediction)
-print(y_input_test)
-# print(len(y_prediction))
-# print(len(y_test))
+    input_dataset = final_dataset[cat]
+    print(input_dataset)
 
-#
-#This is printing the accuracy of the naive bayes predictions. 
-print("Accuracy of regular season predictions using naive bayes: ", metrics.accuracy_score(y_input_test, y_input_prediction))
+    x_input_train, x_input_test, y_input_train, y_input_test = train_test_split(input_dataset, y, test_size=.20)
+    # Naive bayes on the data 
+    gnb = GaussianNB()
+    gnb.fit(x_input_train, y_input_train)
+    y_input_prediction = gnb.predict(x_input_test)
+    y_input_prediction = np.ravel(y_input_prediction)
+    y_input_test = np.ravel(y_input_test)
+    print(y_input_prediction)
+    print(y_input_test)
 
-#
-# Here we are developing a confusion matrix so that we can know the amount of true positives etc. 
-CMMultilabel = multilabel_confusion_matrix(y_input_test, y_input_prediction)
-print(CMMultilabel)
-CM = confusion_matrix(y_input_test, y_input_prediction)
-print("Confusion Matrix Below")
-print(CM)
-TP = CM[0,0]
-FN = CM[0,1]
-FP = CM[1,0]
-TN = CM[1,1]
-print("True Positives: ", TP)
-print("False Negatives: ", FP)
-print("False Positives: ", FP)
-print("True Negatives: ", TN)
+    #
+    #This is printing the accuracy of the naive bayes predictions. 
+    print("Accuracy of regular season predictions using naive bayes: ", metrics.accuracy_score(y_input_test, y_input_prediction))
 
-#
-# Here percision score of the test and actually predicted. 
-precisionScore = precision_score(y_input_test, y_input_prediction, average='micro')
-print("Precision Score: ", precisionScore)
+    #
+    # Here we are developing a confusion matrix so that we can know the amount of true positives etc. 
+    CMMultilabel = multilabel_confusion_matrix(y_input_test, y_input_prediction)
+    print(CMMultilabel)
+    CM = confusion_matrix(y_input_test, y_input_prediction)
+    print("Confusion Matrix Below")
+    print(CM)
+    TP = CM[0,0]
+    FN = CM[0,1]
+    FP = CM[1,0]
+    TN = CM[1,1]
+    print("True Positives: ", TP)
+    print("False Negatives: ", FP)
+    print("False Positives: ", FP)
+    print("True Negatives: ", TN)
 
-#
-# Here we are finding the recall 
-recallScore = recall_score(y_input_test, y_input_prediction, average='micro') 
-print("Recall Score: ", recallScore)
+    #
+    # Here percision score of the test and actually predicted. 
+    precisionScore = precision_score(y_input_test, y_input_prediction, average='micro')
+    print("Precision Score: ", precisionScore)
 
+    #
+    # Here we are finding the recall 
+    recallScore = recall_score(y_input_test, y_input_prediction, average='micro') 
+    print("Recall Score: ", recallScore)
+
+
+# naive_bayes_UI()
+
+repeat = "Y"
+
+while repeat[0] not in ("n", "N"): 
+    naive_bayes_UI()
+    repeat = input("Would you like run this again? (y/n): ")
 
 # Thinking we may want to do something like maybe using a season as a training data and playoffs as a test and see how it works 
 # Best teams head to head not sure really how to do this. 

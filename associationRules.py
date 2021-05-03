@@ -10,6 +10,7 @@ from sklearn.metrics import multilabel_confusion_matrix
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from pyECLAT import ECLAT
+from pprint import pprint
 
 ## just to get the means for each columns (of which is a winning column)
 mean1 = pd.read_csv('data/2000-01_Regular_box_scores.csv', sep=",")
@@ -109,11 +110,14 @@ eclat_instance = ECLAT(data=ar, verbose=True)
 eclat_instance.df_bin
 eclat_instance.uniq_
 
-get_ECLAT_indexes, get_ECLAT_supports = eclat_instance.fit(min_support=0.08,
+get_ECLAT_indexes, get_ECLAT_supports = eclat_instance.fit(min_support=0.37,
                                                            min_combination=1,
-                                                           max_combination=3,
+                                                           max_combination=19,
                                                            separator=' & ',
                                                            verbose=True)
+print("Here are the combinations and the supports that they had.")
+pprint(get_ECLAT_supports)
+
 
 
 
